@@ -1,15 +1,18 @@
 import { Container, AppBar, Typography, Grow, Grid } from '@material-ui/core';
 import Posts from './components/Posts/Posts';
 import Form from './components/Form/Form';
-import bling from './images/bling.png';
+import bling from './images/bling1.webp';
+
+import useStyles from './styles';
 
 function App() {
+  const classes = useStyles();
   return (
     <Container maxWidth="lg">
-      <AppBar position="static" color="inherit">
-        <Typography variant="h2" align="center">
+      <AppBar className={classes.appBar} position="static" color="inherit">
+        <Typography className={classes.heading} variant="h2" align="center">
             Bling
-            <img src={bling} alt="bling" height="60"/>
+            <img className={classes.image} src={bling} alt="bling" height="60"/>
         </Typography>
       </AppBar>
       <Grow in>
