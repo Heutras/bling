@@ -1,19 +1,24 @@
 import { useEffect } from 'react';
 import { Container, AppBar, Typography, Grow, Grid } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
-import { getPosts } from './actions/posts';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchPosts } from './api';
 import Posts from './components/Posts/Posts';
 import Form from './components/Form/Form';
 import bling from './images/bling1.webp';
 
 import useStyles from './styles';
+import { setPosts, createPost } from './slices/posts';
 
 function App() {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const a = useSelector(( { posts } ) => posts.posts);
+  console.log(a);
   useEffect(() => {
-    dispatch(getPosts());
-  }, [dispatch])
+     fetchPosts().then(res => dispatch(setPosts(res.data)))
+     dispatch(createPost({id:2, type:"mal"}))
+  }, [])
+  
   
   return (
     <Container maxWidth="lg">
