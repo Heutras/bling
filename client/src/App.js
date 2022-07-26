@@ -13,10 +13,10 @@ function App() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const a = useSelector(( { posts } ) => posts.posts);
-  console.log(a);
+  //console.log(a);
+  // let b = dispatch(setPosts(res.data));
   useEffect(() => {
-     fetchPosts().then(res => dispatch(setPosts(res.data)))
-     dispatch(createPost({id:2, type:"mal"}))
+     fetchPosts().then(res => console.log(res))
   }, [])
   
   

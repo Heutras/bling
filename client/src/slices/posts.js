@@ -12,7 +12,14 @@ export const postSlice = createSlice({
             state.posts = action.payload;
         },
         createPost: (state, action) => {
-            state.posts.push(action.payload);
+            //state.posts.push(action.payload);
+            state.posts = [...state.posts, action.payload]
+            // try {
+            //     await api.createPost(action.payload);
+            // } catch (error) {
+            //     console.log(error);
+            // }
+            
         }
     }
 })
