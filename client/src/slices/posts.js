@@ -22,6 +22,10 @@ export const postSlice = createSlice({
         updatePost:(state, action) => {
             state.posts = state.posts.map((post)=> post._id === action.payload ? action.payload : post);
         },
+        likePost:(state, action) => {
+            state.posts = state.posts.map((post)=> post._id === action.payload ? action.payload : post);
+        },
+
     },
     extraReducers: (builder) => {
         builder.addCase(fetchPosts.pending, (state) => {

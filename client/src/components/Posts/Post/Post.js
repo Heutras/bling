@@ -5,17 +5,28 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import useStyles from './styles';
 import { formatDistanceToNow } from 'date-fns';
-import { deletePost } from '../../../api';
+import { deletePost, likePost } from '../../../api';
 import { fetchPosts } from '../../../slices/posts';
 import { useDispatch } from 'react-redux';
+import { Notify } from '../../Form/Form';
 
-const Post = ( {post, currentId, setCurrentId} ) => {
+
+const Post = ( {post, setCurrentId} ) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const handleDelete = (id) => {
         deletePost(id).then(res => {
+            
             if(res.status === 200){
-                alert("okey")
+                dispatch(fetchPosts())
+                Notify("Delete", true)
+            }
+        }).catch(Notify("Delete", false))
+    }
+    const handleLike = (id) => {
+        likePost(id).then( res => {
+            console.log(res.status);
+            if(res.status === 200){
                 dispatch(fetchPosts())
             }
         })
@@ -42,7 +53,7 @@ const Post = ( {post, currentId, setCurrentId} ) => {
                 <Typography className={classes.title} variant="h5" gutterBottom>{post.message}</Typography>
             </CardContent>
             <CardActions className={classes.cardActions}>
-                <Button size="small" color="primary" onClick={() => {}}>
+                <Button size="small" color="primary" onClick={(e, id) => {handleLike(post._id)}}>
                     <ThumbUpAltIcon fontSize="small"/>
                     Like
                     {post.likeCount}

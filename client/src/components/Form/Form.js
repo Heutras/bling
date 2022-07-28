@@ -7,10 +7,17 @@ import useStyles from './styles';
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from 'react-redux';
 
-const successCreateNotify = () => toast.success("Post Created!");
-const errorCreateNotify = () => toast.error("Post Creation Failed!");
-const successUpdateNotify = () => toast.success("Post Updated!");
-const errorUpdateNotify = () => toast.error("Post Update Failed!");
+export const Notify = (type, result) => {
+    if(type == "Create" ){
+        result ? toast.success("Post Created!") : toast.error("Post Creation Failed!");
+    }
+    else if( type == "Update"){
+        result ? toast.success("Post Updated!") : toast.error("Post Update Failed!");
+    }
+    else{
+        result ? toast.success("Post Deleted!") : toast.error("Post Could Not Be Deleted!");
+    }
+};
 
 const Form = ({ currentId, setCurrentId }) => {
     const dispatch = useDispatch();
@@ -30,25 +37,25 @@ const Form = ({ currentId, setCurrentId }) => {
             createPost(postData).then((res) => {
                 console.log(res);
                 if(res.status === 201 ){
-                    successCreateNotify();
+                    Notify("Create", true);
                     dispatch(fetchPosts());
                     
                 }
                 else{
-                    errorCreateNotify();
+                    Notify("Create", false);
                 }
-            }).catch((e) => errorCreateNotify());
+            }).catch((e) => Notify("Create", false));
         }else{
             updatePost(currentId, postData).then((res) => {
                 if(res.status === 200 ){
-                    successUpdateNotify();
+                    Notify("Update", true)
                     dispatch(fetchPosts());
                     
                 }
                 else{
-                    errorUpdateNotify();
+                    Notify("Update", false)
                 }
-            }).catch((e) => errorUpdateNotify());
+            }).catch((e) => Notify("Update", false));
         }
     }
     const clear = () => {
