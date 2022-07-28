@@ -1,36 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Typography, Paper } from '@material-ui/core';
 import FileBase from 'react-file-base64';
-import { useDispatch, useSelector } from 'react-redux';
-import { createPost } from '../../api';
+import { createPost, updatePost } from '../../api';
 import useStyles from './styles';
 import toast, { Toaster } from "react-hot-toast";
-import { fetchPosts } from '../../slices/posts';
+import { useSelector } from 'react-redux';
 
 const successNotify = () => toast.success("Post Created!");
 const errorNotify = () => toast.error("Post Creation Failed!");
 
-const Form = () => {
-    
+const Form = ({ currentId, setCurrentId }) => {
     const classes = useStyles();
-    const posts = useSelector(state => state.posts);
-    const [postData, setPostData] = useState({
-        creator:'',
-        title:'',
-        message:'',
-        tags:'',
-        selectedFile:'' 
-    })
+    const post = useSelector(( state ) => currentId ? state.posts.posts.find((p) => p._id === currentId) : null);
+
+    const [postData, setPostData] = useState({ creator:'', title:'', message:'', tags:'', selectedFile:''})
     
+    useEffect(() => {
+      if(post) setPostData(post);
+    }, [post])
+    
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        createPost(postData).then((res) => {
-            try {
-                successNotify(res);
-            } catch (error) {
-                errorNotify(error.code);
-            }
-        });
+        if(currentId === 0) {
+            createPost(postData).then((res) => {
+                try {
+                    successNotify(res);
+                } catch (error) {
+                    errorNotify(error.code);
+                }
+            });
+        }else{
+            updatePost(currentId, postData).then((res) => {
+                try {
+                    successNotify(res);
+                } catch (error) {
+                    errorNotify(error.code);
+                }
+            });
+        }
     }
     const clear = () => {
 

@@ -17,14 +17,10 @@ export const postSlice = createSlice({
             state.posts = action.payload;
         },
         createPost: (state, action) => {
-            //state.posts.push(action.payload);
             state.posts = [...state.posts, action.payload]
-            // try {
-            //     await api.createPost(action.payload);
-            // } catch (error) {
-            //     console.log(error);
-            // }
-            
+        },
+        updatePost:(state, action) => {
+            state.posts = state.posts.map((post)=> post._id === action.payload ? action.payload : post);
         }
     },
     extraReducers: (builder) => {

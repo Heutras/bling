@@ -6,17 +6,20 @@ import { fetchPosts } from '../../slices/posts';
 import Post from './Post/Post';
 import useStyles from './styles';
 
-const Posts = () => {
-    const posts = useSelector(( { posts } ) => posts.posts);
+const Posts = ({ setCurrentId }) => {
     const dispatch = useDispatch();
     useEffect(() => {
-      dispatch(fetchPosts())
+        dispatch(fetchPosts())
     }, [dispatch])
+    const posts = useSelector(( { posts } ) => posts.posts);
+    console.log("bu posts", posts);
     const classes = useStyles();
     return (
-    !posts.length ? <CircularProgress /> : (
+    !posts.length ?
+    <Grid container alignItems="center" justifyContent="center" style={{ minHeight: '70vh' }}><CircularProgress color="error" size={175}/></Grid> :
+    (
         <Grid className={classes.container} container alignItems="stretch" spacing={3}>
-            {posts.map((x)=> <Grid key={x._id} item xs={12} sm={6} md={6}><Post post={x}/></Grid>)}
+            {posts.map((x)=> <Grid key={x._id} item xs={12} sm={6} md={6}><Post post={x} setCurrentId={setCurrentId}/></Grid>)}
         </Grid>
     )
     );
