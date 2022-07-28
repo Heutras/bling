@@ -5,10 +5,21 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import useStyles from './styles';
 import { formatDistanceToNow } from 'date-fns';
+import { deletePost } from '../../../api';
+import { fetchPosts } from '../../../slices/posts';
+import { useDispatch } from 'react-redux';
 
-const Post = ( {post, setCurrentId} ) => {
+const Post = ( {post, currentId, setCurrentId} ) => {
     const classes = useStyles();
-
+    const dispatch = useDispatch();
+    const handleDelete = (id) => {
+        deletePost(id).then(res => {
+            if(res.status === 200){
+                alert("okey")
+                dispatch(fetchPosts())
+            }
+        })
+    }
     return (
         <Card className={classes.card}>
             <CardMedia className={classes.media} image={post.selectedFile} title={post.title}/>
@@ -36,9 +47,8 @@ const Post = ( {post, setCurrentId} ) => {
                     Like
                     {post.likeCount}
                 </Button>
-                <Button size="small" color="primary" onClick={() => {}}>
+                <Button size="small" color="primary" onClick={(e, id) => {handleDelete(post._id)}}>
                     <DeleteIcon fontSize="small"/>
-                    Delete
                 </Button>
             </CardActions>
         </Card>

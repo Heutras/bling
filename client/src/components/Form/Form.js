@@ -2,14 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { TextField, Button, Typography, Paper } from '@material-ui/core';
 import FileBase from 'react-file-base64';
 import { createPost, updatePost } from '../../api';
+import { fetchPosts } from '../../slices/posts';
 import useStyles from './styles';
 import toast, { Toaster } from "react-hot-toast";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-const successNotify = () => toast.success("Post Created!");
-const errorNotify = () => toast.error("Post Creation Failed!");
+const successCreateNotify = () => toast.success("Post Created!");
+const errorCreateNotify = () => toast.error("Post Creation Failed!");
+const successUpdateNotify = () => toast.success("Post Updated!");
+const errorUpdateNotify = () => toast.error("Post Update Failed!");
 
 const Form = ({ currentId, setCurrentId }) => {
+    const dispatch = useDispatch();
     const classes = useStyles();
     const post = useSelector(( state ) => currentId ? state.posts.posts.find((p) => p._id === currentId) : null);
 
@@ -19,29 +23,37 @@ const Form = ({ currentId, setCurrentId }) => {
       if(post) setPostData(post);
     }, [post])
     
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        
         if(currentId === 0) {
             createPost(postData).then((res) => {
-                try {
-                    successNotify(res);
-                } catch (error) {
-                    errorNotify(error.code);
+                console.log(res);
+                if(res.status === 201 ){
+                    successCreateNotify();
+                    dispatch(fetchPosts());
+                    
                 }
-            });
+                else{
+                    errorCreateNotify();
+                }
+            }).catch((e) => errorCreateNotify());
         }else{
             updatePost(currentId, postData).then((res) => {
-                try {
-                    successNotify(res);
-                } catch (error) {
-                    errorNotify(error.code);
+                if(res.status === 200 ){
+                    successUpdateNotify();
+                    dispatch(fetchPosts());
+                    
                 }
-            });
+                else{
+                    errorUpdateNotify();
+                }
+            }).catch((e) => errorUpdateNotify());
         }
     }
     const clear = () => {
-
+        setCurrentId(0);
+        setPostData({ creator:'', title:'', message:'', tags:'', selectedFile:''});
     }
     return (
         <Paper className={classes.paper}>

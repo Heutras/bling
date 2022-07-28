@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Container, AppBar, Typography, Grow, Grid } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchPosts } from './api';
+import { fetchPosts } from './slices/posts';
 import Posts from './components/Posts/Posts';
 import Form from './components/Form/Form';
 import bling from './images/bling1.webp';
@@ -10,16 +10,18 @@ import useStyles from './styles';
 import { setPosts, createPost } from './slices/posts';
 
 function App() {
-  const [currentId, setCurrentId] = useState(null);
+  const [currentId, setCurrentId] = useState(0);
   const classes = useStyles();
   const dispatch = useDispatch();
-  // const a = useSelector(( { posts } ) => posts.posts);
-  // console.log(a,"bu a'nin degeri");
-  // // let b = dispatch(setPosts(res.data));
+  const a = useSelector(( { posts } ) => posts.posts);
+  console.log(a,"bu a'nin degeri");
+  useEffect(() => {
+    console.log("buradki fetchpost calisiyo")
+    
+  }, [])
   // useEffect(() => {
-  //   console.log("buradki fetchpost calisiyo")
-  //   fetchPosts().then(res => console.log("bu resin degeri",res))
-  // }, [])
+  //   dispatch(fetchPosts())}
+  // ,[dispatch])
   
   
   return (
@@ -34,7 +36,7 @@ function App() {
         <Container>
           <Grid container justifyContent="space-between" alignItems="stretch" spacing={3}>
             <Grid item xs={12} sm={7}>
-              <Posts setCurrentId={setCurrentId}/>
+              <Posts currentId={currentId} setCurrentId={setCurrentId}/>
             </Grid>
             <Grid item xs={12} sm={4}>
               <Form currentId={currentId} setCurrentId={setCurrentId}/>
