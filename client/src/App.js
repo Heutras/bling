@@ -12,12 +12,13 @@ import { setPosts, createPost } from './slices/posts';
 function App() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const a = useSelector(( { posts } ) => posts.posts);
-  //console.log(a);
-  // let b = dispatch(setPosts(res.data));
-  useEffect(() => {
-     fetchPosts().then(res => console.log(res))
-  }, [])
+  // const a = useSelector(( { posts } ) => posts.posts);
+  // console.log(a,"bu a'nin degeri");
+  // // let b = dispatch(setPosts(res.data));
+  // useEffect(() => {
+  //   console.log("buradki fetchpost calisiyo")
+  //   fetchPosts().then(res => console.log("bu resin degeri",res))
+  // }, [])
   
   
   return (
@@ -30,7 +31,7 @@ function App() {
       </AppBar>
       <Grow in>
         <Container>
-          <Grid container justify="space-between" alignItems="stretch" spacing={3}>
+          <Grid container justifyContent="space-between" alignItems="stretch" spacing={3}>
             <Grid item xs={12} sm={7}>
               <Posts></Posts>
             </Grid>

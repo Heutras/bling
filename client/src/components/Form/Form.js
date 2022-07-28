@@ -1,12 +1,19 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField, Button, Typography, Paper } from '@material-ui/core';
 import FileBase from 'react-file-base64';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { createPost } from '../../api';
 import useStyles from './styles';
+import toast, { Toaster } from "react-hot-toast";
+import { fetchPosts } from '../../slices/posts';
+
+const successNotify = () => toast.success("Post Created!");
+const errorNotify = () => toast.error("Post Creation Failed!");
+
 const Form = () => {
+    
     const classes = useStyles();
-    const dispatch = useDispatch();
+    const posts = useSelector(state => state.posts);
     const [postData, setPostData] = useState({
         creator:'',
         title:'',
@@ -14,15 +21,23 @@ const Form = () => {
         tags:'',
         selectedFile:'' 
     })
+    
     const handleSubmit = (e) => {
         e.preventDefault();
-        createPost(postData).then((res) => console.log(res));
+        createPost(postData).then((res) => {
+            try {
+                successNotify(res);
+            } catch (error) {
+                errorNotify(error.code);
+            }
+        });
     }
     const clear = () => {
 
     }
     return (
         <Paper className={classes.paper}>
+            <Toaster/>
             <form autoComplete='off' noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
                 <Typography variant="h6" >Creating a Post</Typography>
                 <TextField name="creator" variant='outlined' label="Creator" fullWidth value={postData.creator} onChange={(e) => setPostData({ ...postData, creator: e.target.value })}/>
