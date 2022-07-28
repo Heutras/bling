@@ -49,13 +49,13 @@ const Post = ( {post, setCurrentId} ) => {
             <div className={classes.details}>
                 <Typography variant="body2" color="textSecondary">{post.tags.map((tag) => `#${tag} `)}</Typography>
             </div>
+            <Typography className={classes.title} variant="h5" gutterBottom>{post.title}</Typography>
             <CardContent>
-                <Typography className={classes.title} variant="h5" gutterBottom>{post.message}</Typography>
+                <Typography variant="body2" color="textSecondary" component="p">{post.message}</Typography>
             </CardContent>
             <CardActions className={classes.cardActions}>
                 <Button size="small" color="primary" onClick={(e, id) => {handleLike(post._id)}}>
-                    <ThumbUpAltIcon fontSize="small"/>
-                    Like
+                    <ThumbUpAltIcon fontSize="small"/>&nbsp;&nbsp;
                     {post.likeCount}
                 </Button>
                 <Button size="small" color="primary" onClick={(e, id) => {handleDelete(post._id)}}>
