@@ -5,8 +5,8 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import useStyles from './styles';
 import { formatDistanceToNow } from 'date-fns';
-import { deletePost, likePost } from '../../../api';
-import { fetchPosts } from '../../../slices/posts';
+import * as api from '../../../api';
+import { fetchPosts} from '../../../slices/posts';
 import { useDispatch } from 'react-redux';
 import { Notify } from '../../Form/Form';
 
@@ -15,7 +15,7 @@ const Post = ( {post, setCurrentId} ) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const handleDelete = (id) => {
-        deletePost(id).then(res => {
+        api.deletePost(id).then(res => {
             
             if(res.status === 200){
                 dispatch(fetchPosts())
@@ -24,12 +24,12 @@ const Post = ( {post, setCurrentId} ) => {
         }).catch(Notify("Delete", false))
     }
     const handleLike = (id) => {
-        likePost(id).then( res => {
-            console.log(res.status);
+        api.likePost(id).then( res => {
             if(res.status === 200){
                 dispatch(fetchPosts())
+                Notify("Like", true)
             }
-        })
+        }).catch(Notify("Like", false));
     }
     return (
         <Card className={classes.card}>

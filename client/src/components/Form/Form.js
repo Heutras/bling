@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Typography, Paper } from '@material-ui/core';
 import FileBase from 'react-file-base64';
-import { createPost, updatePost } from '../../api';
-import { fetchPosts } from '../../slices/posts';
+import * as api from '../../api/index.js';
+import { fetchPosts, createPost } from '../../slices/posts';
 import useStyles from './styles';
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,6 +14,9 @@ export const Notify = (type, result) => {
     else if( type === "Update"){
         result ? toast.success("Post Updated!") : toast.error("Post Update Failed!");
     }
+    else if(type === "Like"){
+        result ? toast.success("Post Liked!") : toast.error("Post Could Not Be Liked!");
+    }
     else{
         result ? toast.success("Post Deleted!") : toast.error("Post Could Not Be Deleted!");
     }
@@ -23,9 +26,7 @@ const Form = ({ currentId, setCurrentId }) => {
     const dispatch = useDispatch();
     const classes = useStyles();
     const post = useSelector(( state ) => currentId ? state.posts.posts.find((p) => p._id === currentId) : null);
-
     const [postData, setPostData] = useState({ creator:'', title:'', message:'', tags:'', selectedFile:''})
-    
     useEffect(() => {
       if(post) setPostData(post);
     }, [post])
@@ -34,21 +35,25 @@ const Form = ({ currentId, setCurrentId }) => {
         e.preventDefault();
         
         if(currentId === 0) {
-            createPost(postData).then((res) => {
-                console.log(res);
-                if(res.status === 201 ){
-                    Notify("Create", true);
-                    dispatch(fetchPosts());
+            console.log("calisiyo")
+            dispatch(createPost({ creator:'', title:'', message:'', tags:'', selectedFile:''}))
+            // api.createPost(postData).then((res) => {
+            //     console.log(res);
+            //     if(res.status === 201 ){
+            //         Notify("Create", true);
+            //         // dispatch(createPost(postData));
+            //         dispatch(fetchPosts());
                     
-                }
-                else{
-                    Notify("Create", false);
-                }
-            }).catch((e) => Notify("Create", false));
+            //     }
+            //     else{
+            //         Notify("Create", false);
+            //     }
+            // }).catch((e) => Notify("Create", false));
         }else{
-            updatePost(currentId, postData).then((res) => {
+            api.updatePost(currentId, postData).then((res) => {
                 if(res.status === 200 ){
                     Notify("Update", true)
+                    console.log("updatePost.data : ",res.data)
                     dispatch(fetchPosts());
                     
                 }

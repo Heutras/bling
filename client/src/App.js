@@ -5,24 +5,17 @@ import { fetchPosts } from './slices/posts';
 import Posts from './components/Posts/Posts';
 import Form from './components/Form/Form';
 import bling from './images/bling1.webp';
-
 import useStyles from './styles';
-import { setPosts, createPost } from './slices/posts';
 
 function App() {
   const [currentId, setCurrentId] = useState(0);
   const classes = useStyles();
   const dispatch = useDispatch();
-  const a = useSelector(( { posts } ) => posts.posts);
-  console.log(a,"bu a'nin degeri");
   useEffect(() => {
-    console.log("buradki fetchpost calisiyo")
-    
-  }, [])
-  // useEffect(() => {
-  //   dispatch(fetchPosts())}
-  // ,[dispatch])
-  
+    dispatch(fetchPosts())
+  }
+  ,[dispatch])
+  const posts = useSelector(( { posts } ) => posts.posts);  
   
   return (
     <Container maxWidth="lg">
@@ -36,7 +29,7 @@ function App() {
         <Container>
           <Grid className={classes.mainContainer} container justifyContent="space-between" alignItems="stretch" spacing={3}>
             <Grid item xs={12} sm={7}>
-              <Posts setCurrentId={setCurrentId}/>
+              <Posts posts={posts} setCurrentId={setCurrentId}/>
             </Grid>
             <Grid item xs={12} sm={4}>
               <Form currentId={currentId} setCurrentId={setCurrentId}/>
