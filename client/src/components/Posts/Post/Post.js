@@ -29,7 +29,6 @@ const Post = ( {post, setCurrentId} ) => {
     const handleLike = (id) => {
         api.likePost(id).then( res => {
             if(res.status === 200){
-                console.log("like res data", res.data)
                 dispatch(updatePost(res.data))
                 Notify("Like", true)
             }

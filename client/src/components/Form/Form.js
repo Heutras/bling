@@ -47,9 +47,6 @@ const Form = ({ currentId, setCurrentId }) => {
         }else{
             api.updatePost(currentId, postData).then((res) => {
                 if(res.status === 200 ){
-                    console.log("id bu",currentId)
-                    console.log("post bu", postData)
-                    console.log("res data", res.data)
                     dispatch(updatePost(postData));
                     Notify("Update", true)
                 }
