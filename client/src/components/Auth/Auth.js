@@ -4,11 +4,13 @@ import { GoogleLogin, googleLogout } from '@react-oauth/google';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import useStyles from './styles';
 import Input from './Input'
+import { useDispatch } from "react-redux";
 
 function Auth() {
     const classes = useStyles();
     const [showPassword, setShowPassword] = useState(false);
     const [isSignup, setIsSignup] = useState(false);
+    const dispatch = useDispatch();
 
     const handleShowPassword = () => {
         setShowPassword((prevShowPassword) => !prevShowPassword)
@@ -24,7 +26,19 @@ function Auth() {
         setIsSignup((prevIsSignup) => !prevIsSignup);
         handleShowPassword(false);
     }
+    const googleSuccess = async (res) => {
+        const result = res?.profileObj;
+        const token = res?.tokenId;
 
+        try {
+            // dispatch(authAction);
+        } catch (error) {
+            
+        }
+    };
+    const googleError = async(res) => {
+
+    };
     return (
 
         <Container component="main" maxWidth="xs">
@@ -51,14 +65,15 @@ function Auth() {
                         <Input name="password" label="Password" handleChange={handleChange}/>
                         { isSignup && <Input name="confirmPassword" label="Repeat Password" handleChange={handleChange} type="password" />}
                     </Grid>
-                    <GoogleLogin 
-                    onSuccess={(res) => console.log(res)}
-                    onError={() => console.log('res')}
-                    />
                     <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
                         {isSignup ? 'Sign Up' : 'Sign In'}
                     </Button>
-                    <Grid container justify="flex-end">
+                    <GoogleLogin
+                    onSuccess={googleSuccess}
+                    onError={googleError}
+                    useOneTap
+                    />
+                    <Grid container justifyContent="flex-end">
                         <Grid item>
                             <Button onClick={switchMode}>
                                 { isSignup ? 'Already have an account? Sign in' : "'Don't have an account? Sign up"}
