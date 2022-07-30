@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { TextField, Button, Typography, Paper } from '@material-ui/core';
 import FileBase from 'react-file-base64';
 import * as api from '../../api/index.js';
-import { fetchPosts} from '../../slices/posts';
+import { createPost, updatePost } from '../../slices/posts';
 import useStyles from './styles';
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from 'react-redux';
@@ -35,32 +35,28 @@ const Form = ({ currentId, setCurrentId }) => {
         e.preventDefault();
         
         if(currentId === 0) {
-            // console.log("calisiyo")
-            // dispatch(createPost({ creator:'', title:'', message:'', tags:'', selectedFile:''}))
             api.createPost(postData).then((res) => {
-                console.log(res);
                 if(res.status === 201 ){
                     Notify("Create", true);
-                    // dispatch(createPost(postData));
-                    dispatch(fetchPosts());
-                    
+                    dispatch(createPost(res.data));                    
                 }
                 else{
                     Notify("Create", false);
                 }
-            }).catch((e) => Notify("Create", false));
+            });
         }else{
             api.updatePost(currentId, postData).then((res) => {
                 if(res.status === 200 ){
+                    console.log("id bu",currentId)
+                    console.log("post bu", postData)
+                    console.log("res data", res.data)
+                    dispatch(updatePost(postData));
                     Notify("Update", true)
-                    console.log("updatePost.data : ",res.data)
-                    dispatch(fetchPosts());
-                    
                 }
                 else{
                     Notify("Update", false)
                 }
-            }).catch((e) => Notify("Update", false));
+            });
         }
     }
     const clear = () => {

@@ -6,30 +6,37 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import useStyles from './styles';
 import { formatDistanceToNow } from 'date-fns';
 import * as api from '../../../api';
-import { fetchPosts} from '../../../slices/posts';
-import { useDispatch } from 'react-redux';
+import { deletePost, updatePost} from '../../../slices/posts';
+import { useDispatch} from 'react-redux';
 import { Notify } from '../../Form/Form';
 
 
 const Post = ( {post, setCurrentId} ) => {
+    
     const classes = useStyles();
     const dispatch = useDispatch();
     const handleDelete = (id) => {
         api.deletePost(id).then(res => {
-            
             if(res.status === 200){
-                dispatch(fetchPosts())
+                dispatch(deletePost(res.data._id))
                 Notify("Delete", true)
             }
-        }).catch(Notify("Delete", false))
+            else{
+                Notify("Delete", false);
+            }
+        })
     }
     const handleLike = (id) => {
         api.likePost(id).then( res => {
             if(res.status === 200){
-                dispatch(fetchPosts())
+                console.log("like res data", res.data)
+                dispatch(updatePost(res.data))
                 Notify("Like", true)
             }
-        }).catch(Notify("Like", false));
+            else{
+                Notify("Like", false)
+            }
+        });
     }
     return (
         <Card className={classes.card}>
@@ -54,11 +61,11 @@ const Post = ( {post, setCurrentId} ) => {
                 <Typography variant="body2" color="textSecondary" component="p">{post.message}</Typography>
             </CardContent>
             <CardActions className={classes.cardActions}>
-                <Button size="small" color="primary" onClick={(e, id) => {handleLike(post._id)}}>
+                <Button size="small" color="primary" onClick={(e, id) => handleLike(post._id)}>
                     <ThumbUpAltIcon fontSize="small"/>&nbsp;&nbsp;
                     {post.likeCount}
                 </Button>
-                <Button size="small" color="primary" onClick={(e, id) => {handleDelete(post._id)}}>
+                <Button size="small" color="primary" onClick={(e, id) => handleDelete(post._id)}>
                     <DeleteIcon fontSize="small"/>
                 </Button>
             </CardActions>
