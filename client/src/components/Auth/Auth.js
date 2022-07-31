@@ -1,12 +1,18 @@
 import React, { useState } from 'react'
+import { useDispatch } from "react-redux";
 import { Avatar, Button, Paper, Grid, Typography, Container } from '@material-ui/core';
 import { GoogleLogin, googleLogout } from '@react-oauth/google';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import { useHistory } from 'react-router-dom';
 import useStyles from './styles';
 import Input from './Input'
-import { useDispatch } from "react-redux";
+import Icon from './Icon';
+import jwt_decode from 'jwt-decode';
+import { signIn } from '../../slices/auth';
+
 
 function Auth() {
+    const history = useHistory();
     const classes = useStyles();
     const [showPassword, setShowPassword] = useState(false);
     const [isSignup, setIsSignup] = useState(false);
@@ -26,23 +32,32 @@ function Auth() {
         setIsSignup((prevIsSignup) => !prevIsSignup);
         handleShowPassword(false);
     }
-    const googleSuccess = async (res) => {
-        const result = res?.profileObj;
-        const token = res?.tokenId;
-
+    const googleSuccess = (res) => {
         try {
-            // dispatch(authAction);
+            if(res?.credential){
+                const { name, picture, sub } = jwt_decode(res.credential)
+                const user = {
+                    _id: sub,
+                    _type: 'user',
+                    userName: name,
+                    image: picture
+                }
+                history.push('/');
+                dispatch(signIn({  token: res.credential, user}));
+                // return { token: res.credential, name, picture, sub }
+            }
+            console.log('res google',res)
         } catch (error) {
-            
+            console.log(error)
         }
     };
     const googleError = async(res) => {
-
+        console.log(res)
     };
     return (
 
         <Container component="main" maxWidth="xs">
-        
+  
             <Paper className={classes.paper} elevation={3}>
             
                 <Avatar className={classes.avatar}>
@@ -71,7 +86,11 @@ function Auth() {
                     <GoogleLogin
                     onSuccess={googleSuccess}
                     onError={googleError}
-                    useOneTap
+                    render={(renderProps) => (
+                       <Button className={classes.googleButton} color='primary' fullWidth onClick={renderProps.onClick} disabled={renderProps.disabled} startIcon={<Icon/>} variant="contained">
+                        Google Sign In
+                       </Button> 
+                    )}
                     />
                     <Grid container justifyContent="flex-end">
                         <Grid item>
