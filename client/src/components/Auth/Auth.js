@@ -1,19 +1,20 @@
 import React, { useState } from 'react'
 import { useDispatch } from "react-redux";
 import { Avatar, Button, Paper, Grid, Typography, Container } from '@material-ui/core';
-import { GoogleLogin, googleLogout } from '@react-oauth/google';
+import { GoogleLogin } from '@react-oauth/google';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { useHistory } from 'react-router-dom';
 import useStyles from './styles';
 import Input from './Input'
 import Icon from './Icon';
 import jwt_decode from 'jwt-decode';
-import { signIn } from '../../slices/auth';
+import { auth, signIn, signUp } from '../../slices/auth';
 
-
+const initialState = { firstName: '', lastName: '', email: '', password:'', confirmPassword:'' };
 function Auth() {
     const history = useHistory();
     const classes = useStyles();
+    const [formData, setFormData] = useState(initialState)
     const [showPassword, setShowPassword] = useState(false);
     const [isSignup, setIsSignup] = useState(false);
     const dispatch = useDispatch();
@@ -22,15 +23,24 @@ function Auth() {
         setShowPassword((prevShowPassword) => !prevShowPassword)
     }
 
-    const handleSubmit = () => {
-
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        
+        if(isSignup){
+            dispatch(signUp(formData))
+            history.push('/')
+        }
+        else{
+            dispatch(signIn(formData))
+            history.push('/')
+        }
     }
-    const handleChange = () => {
-
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value})
     }
     const switchMode = () => {
         setIsSignup((prevIsSignup) => !prevIsSignup);
-        handleShowPassword(false);
+        setShowPassword(false);
     }
     const googleSuccess = (res) => {
         try {
@@ -43,7 +53,7 @@ function Auth() {
                     image: picture
                 }
                 history.push('/');
-                dispatch(signIn({  token: res.credential, user}));
+                dispatch(auth({  token: res.credential, user}));
             }
         } catch (error) {
             console.log(error)
@@ -68,14 +78,13 @@ function Auth() {
                         {
                             isSignup && (
                                 <>
-                                {console.log("buraya giriyo")}
                                 <Input name="firstName" label="First Name" handleChange={handleChange} half/>
-                                <Input name="LastName" label="Last Name" handleChange={handleChange} half/>
+                                <Input name="lastName" label="Last Name" handleChange={handleChange} half/>
                                 </>
                             )
                         }
                         <Input name="email" label="Email Address" handleChange={handleChange} type="email"/>
-                        <Input name="password" label="Password" handleChange={handleChange}/>
+                        <Input name="password" label="Password" handleShowPassword={handleShowPassword} handleChange={handleChange} type={showPassword ? 'text' : 'password'}/>
                         { isSignup && <Input name="confirmPassword" label="Repeat Password" handleChange={handleChange} type="password" />}
                     </Grid>
                     <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>

@@ -2,7 +2,7 @@ import { Container, Grid, Grow } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchPosts } from '../../slices/posts';
-import { setUserData } from '../../slices/auth';
+import { setAuth } from '../../slices/auth';
 import Form from '../Form/Form'
 import Posts from '../Posts/Posts'
 
@@ -17,7 +17,7 @@ function Home() {
 
 
 
-    dispatch(setUserData(JSON.parse(localStorage.getItem('profile'))))
+    dispatch(setAuth(JSON.parse(localStorage.getItem('profile'))))
     
     // İlk girişte user data'sini okuyup redux store'a atan kod parcasi
 
