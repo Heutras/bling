@@ -44,9 +44,7 @@ function Auth() {
                 }
                 history.push('/');
                 dispatch(signIn({  token: res.credential, user}));
-                // return { token: res.credential, name, picture, sub }
             }
-            console.log('res google',res)
         } catch (error) {
             console.log(error)
         }

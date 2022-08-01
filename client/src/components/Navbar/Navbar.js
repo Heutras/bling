@@ -1,25 +1,33 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import { AppBar, Avatar, Button, Toolbar, Typography } from '@material-ui/core'
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import bling from '../../images/bling1.webp';
 import { signOut } from "../../slices/auth";
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import decode from 'jwt-decode';
 
 import useStyles from './styles.js';
 
 function Navbar() {
+    const location = useLocation();
     const history = useHistory();
     const dispatch = useDispatch();
-    // const [user, setuser] = useState(second)
     const user = useSelector( (state) => state.auth.user )
-    // console.log(user);
     const classes = useStyles();
 
     const logout = () => {
         dispatch(signOut());
         history.push('/auth');
-      };    
+    };
+    useEffect(() => {
+        const token = JSON.parse(localStorage.getItem('token'));
+        if (token) {
+            const decodedToken = decode(token);
+            console.log(decodedToken)
+            if (decodedToken.exp * 1000 < new Date().getTime()) logout();
+        }
+    }, [location]); 
     return (
         <AppBar className={classes.appBar} position="static" color="inherit">
             <div className={classes.brandContainer}>
