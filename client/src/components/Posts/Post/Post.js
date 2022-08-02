@@ -8,7 +8,7 @@ import useStyles from './styles';
 import { formatDistanceToNow } from 'date-fns';
 import * as api from '../../../api';
 import { deletePost, updatePost} from '../../../slices/posts';
-import { useDispatch} from 'react-redux';
+import { useDispatch, useSelector} from 'react-redux';
 import { Notify } from '../../Form/Form';
 
 
@@ -16,7 +16,7 @@ const Post = ( {post, setCurrentId} ) => {
     
     const classes = useStyles();
     const dispatch = useDispatch();
-    const user = JSON.parse(localStorage.getItem('profile'));
+    const user = useSelector((state) => state.auth.user);
     const [likes, setLikes] = useState(post?.likes)
     
     const userId = user?._id;

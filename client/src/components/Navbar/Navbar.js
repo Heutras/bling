@@ -13,9 +13,8 @@ function Navbar() {
     const location = useLocation();
     const history = useHistory();
     const dispatch = useDispatch();
-    const user = useSelector( (state) => state.auth.user )
+    const user = useSelector((state) => state.auth.user )
     const classes = useStyles();
-
     const logout = () => {
         dispatch(signOut());
         history.push('/auth');
@@ -37,8 +36,8 @@ function Navbar() {
             <Toolbar className={classes.toolbar}>
                 {user ? (
                     <div className={classes.profile}>
-                        <Avatar className={classes.purple} alt={user?.userName} src={user?.image}>{user?.userName?.charAt(0)}</Avatar>
-                        <Typography className={classes.userName} variant="h6">{user?.userName}</Typography>
+                        <Avatar className={classes.purple} alt={user?.userName ? user?.userName : user?.name} src={user?.image}>{user?.userName ? user?.userName?.charAt(0) : user?.name.charAt(0)}</Avatar>
+                        <Typography className={classes.userName} variant="h6">{user?.userName ? user?.userName : user?.name}</Typography>
                         <Button variant="contained" className={classes.logout} color="secondary" onClick={logout}>Logout</Button>
                     </div>
                 ) : (

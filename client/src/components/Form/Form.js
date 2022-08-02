@@ -28,14 +28,13 @@ const Form = ({ currentId, setCurrentId }) => {
     const post = useSelector(( state ) => currentId ? state.posts.posts.find((p) => p._id === currentId) : null);
     const [postData, setPostData] = useState({title:'', message:'', tags:'', selectedFile:''})
     const user = useSelector( (state) => state.auth.user);
-    console.log('user bilgi',user)
+    console.log('buraday ya0asd',user)
     useEffect(() => {
       if(post) setPostData(post);
     }, [post])
     
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
         if(currentId === 0) {
             api.createPost({...postData, name: user?.name}).then((res) => {
                 if(res.status === 201 ){
@@ -63,7 +62,7 @@ const Form = ({ currentId, setCurrentId }) => {
         setPostData({title:'', message:'', tags:'', selectedFile:''});
     }
 
-    if(!user?.name){
+    if(!user){
         return (
             <Paper className={classes.paper}>
                 <Typography variant="h6" align="center">Please Sign In to create your own memories and like other's memories</Typography>
