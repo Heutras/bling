@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { AppBar, Avatar, Button, Toolbar, Typography } from '@material-ui/core'
+import { AppBar, Avatar, Button, Toolbar, Typography } from '@mui/material'
 import { Link, useLocation } from 'react-router-dom';
 import bling from '../../images/bling1.webp';
 import { signOut } from "../../slices/auth";

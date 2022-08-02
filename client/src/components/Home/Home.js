@@ -1,4 +1,4 @@
-import { Container, Grid, Grow } from '@material-ui/core'
+import { Container, Grid, Grow } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchPosts } from '../../slices/posts';
@@ -14,8 +14,6 @@ function Home() {
       dispatch(fetchPosts())
     }
     ,[dispatch]);
-
-
 
     dispatch(setAuth(JSON.parse(localStorage.getItem('profile'))))
     

@@ -1,6 +1,11 @@
-import { makeStyles } from '@material-ui/core/styles';
+import { createTheme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
-export default makeStyles((theme) => ({
+const theme = createTheme({
+  spacing: 8,
+});
+
+export default makeStyles(() => ({
   paper: {
     marginTop: theme.spacing(8),
     display: 'flex',
@@ -18,7 +23,7 @@ export default makeStyles((theme) => ({
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: '100%',
     marginTop: theme.spacing(3),
   },
   submit: {

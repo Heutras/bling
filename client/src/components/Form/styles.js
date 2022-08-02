@@ -1,6 +1,11 @@
-import { makeStyles } from '@material-ui/core/styles';
+import { createTheme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
-export default makeStyles((theme) => ({
+const theme = createTheme({
+  spacing: 8,
+});
+
+export default makeStyles(() => ({
   root: {
     '& .MuiTextField-root': {
       margin: theme.spacing(1),

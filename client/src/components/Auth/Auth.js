@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { useDispatch } from "react-redux";
-import { Avatar, Button, Paper, Grid, Typography, Container } from '@material-ui/core';
+import { Avatar, Button, Paper, Grid, Typography, Container } from '@mui/material';
 import { GoogleLogin } from '@react-oauth/google';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useHistory } from 'react-router-dom';
 import useStyles from './styles';
 import Input from './Input'

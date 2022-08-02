@@ -1,6 +1,12 @@
-import { makeStyles } from '@material-ui/core/styles';
+import { createTheme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
-export default makeStyles((theme) => ({
+const theme = createTheme({
+  spacing: 8,
+});
+
+
+export default makeStyles(() => ({
   mainContainer: {
     display: 'flex',
     alignItems: 'center',

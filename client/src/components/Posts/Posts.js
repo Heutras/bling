@@ -1,4 +1,4 @@
-import { Grid, CircularProgress } from '@material-ui/core';
+import { Grid, CircularProgress } from '@mui/material';
 import Post from './Post/Post';
 import useStyles from './styles';
 

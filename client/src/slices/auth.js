@@ -1,8 +1,31 @@
-import { createSlice } from "@reduxjs/toolkit";
-import * as api from '../api/index.js';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from 'axios';
+const API = axios.create({ baseURL: 'http://localhost:5000/'})
+
+
+API.interceptors.request.use((req) => {
+    if (localStorage.getItem('profile')) {
+      req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem('token'))}`;
+    }
+  
+    return req;
+});
+
 const initialState = {
     user: null
 };
+
+
+export const signIn = createAsyncThunk('user/signInStatus',async (formData) => {
+    const res = await API.post('/user/signin', formData);
+    return res.data;
+})
+
+export const signUp = createAsyncThunk('user/signUpStatus',async (formData) => {
+    const res = await API.post('/user/signup', formData);
+    return res.data;
+})
+
 export const authSlice = createSlice({
     name: 'auth',
     initialState,
@@ -15,34 +38,45 @@ export const authSlice = createSlice({
             localStorage.setItem('token', JSON.stringify(action.payload.token))
             localStorage.setItem('profile', JSON.stringify(action.payload.user))
         },
-        signIn: (state, action) => {
-            api.signIn(action.payload)
-            .then((res) => {
-                console.log('iste res',res)
-                const { data} = res
-                state.user = data.result
-                localStorage.setItem('token', JSON.stringify(data.token))
-                localStorage.setItem('profile', JSON.stringify(data.result))
-            })
-            .catch( (err) => console.log(err))
-        },
-        signUp: (state, action) => {
-            api.signUp(action.payload)
-            .then((res) => {
-                const { data } = res
-                state.user = data.result
-                localStorage.setItem('token', JSON.stringify(data.token))
-                localStorage.setItem('profile', JSON.stringify(data.result))
-            })
-            .catch((err)=> console.log(err))
-        },
         signOut: (state) => {
             state.user =  null
             localStorage.clear();
         },
     },
-    extraReducers: () => {},
+    extraReducers: (builder) => {
+        builder.addCase(signIn.pending, (state) => {
+          state.loading = true;
+        })
+        builder.addCase(signIn.fulfilled, (state, action) => {
+            console.log('bu ne',action.payload)
+            state.user = action.payload.result
+            state.loading = false;
+            state.error = '';
+            localStorage.setItem('token', JSON.stringify(action.payload.token))
+            localStorage.setItem('profile', JSON.stringify(action.payload.result))
+        })
+        builder.addCase(signIn.rejected, (state, action) => {
+            state.loading = false;
+            state.posts = [];
+            state.error = action.error.message;
+        })
+        builder.addCase(signUp.pending, (state) => {
+          state.loading = true;
+        })
+        builder.addCase(signUp.fulfilled, (state, action) => {
+            state.user = action.payload.result
+            state.loading = false;
+            state.error = '';
+            localStorage.setItem('token', JSON.stringify(action.payload.token))
+            localStorage.setItem('profile', JSON.stringify(action.payload.result))
+        })
+        builder.addCase(signUp.rejected, (state, action) => {
+            state.loading = false;
+            state.posts = [];
+            state.error = action.error.message;
+        })
+      },
 })
 
-export const { signIn, auth , signOut, signUp, setAuth } = authSlice.actions;
+export const { auth , signOut, setAuth } = authSlice.actions;
 export default authSlice.reducer;
