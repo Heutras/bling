@@ -28,7 +28,6 @@ const Form = ({ currentId, setCurrentId }) => {
     const post = useSelector(( state ) => currentId ? state.posts.posts.find((p) => p._id === currentId) : null);
     const [postData, setPostData] = useState({title:'', message:'', tags:'', selectedFile:''})
     const user = useSelector( (state) => state.auth.user);
-    console.log('buraday ya0asd',user)
     useEffect(() => {
       if(post) setPostData(post);
     }, [post])
@@ -48,7 +47,7 @@ const Form = ({ currentId, setCurrentId }) => {
         }else{
             api.updatePost(currentId, postData).then((res) => {
                 if(res.status === 200 ){
-                    dispatch(updatePost({...postData, name: user?.name}));
+                    dispatch(updatePost({...postData, name: user?.userName}));
                     Notify("Update", true)
                 }
                 else{
