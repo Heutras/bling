@@ -3,7 +3,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
-import { fetchPosts } from '../../slices/posts';
+import { fetchPosts, fetchPostsBySearch } from '../../slices/posts';
 import { setAuth } from '../../slices/auth';
 import Form from '../Form/Form'
 import Posts from '../Posts/Posts'
@@ -21,15 +21,17 @@ function Home() {
     const query = useQuery();
     const history = useHistory();
     const page = query.get('page') || 1;
-    const searhQuert = query.get('searchQuery');
+    const searchQuery = query.get('searchQuery');
     const [search, setSearch] = useState('');
     const [tags, setTags] = useState([]);
     useEffect(() => {
       dispatch(fetchPosts())
     }
-    ,[dispatch]);
+    ,[]);
 
-    dispatch(setAuth(JSON.parse(localStorage.getItem('profile'))))
+    useEffect(() => {
+      dispatch(setAuth(JSON.parse(localStorage.getItem('profile'))))
+    },[])
     
     // İlk girişte user data'sini okuyup redux store'a atan kod parcasi
 
@@ -38,7 +40,7 @@ function Home() {
     
     const searchPost = () => {
       if(search.trim()) {
-        // dispatch -> fetch searched post
+        dispatch(fetchPostsBySearch({ search, tags: tags.join(',') }))
       }
       else{
         history.push('/');
