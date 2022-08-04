@@ -31,16 +31,17 @@ function Home() {
 
     useEffect(() => {
       dispatch(setAuth(JSON.parse(localStorage.getItem('profile'))))
+      // İlk girişte user data'sini okuyup redux store'a atan kod parcasi
     },[])
     
-    // İlk girişte user data'sini okuyup redux store'a atan kod parcasi
 
     const posts = useSelector(( { posts } ) => posts.posts);  
     
     
     const searchPost = () => {
-      if(search.trim()) {
+      if(search.trim() || tags) {
         dispatch(fetchPostsBySearch({ search, tags: tags.join(',') }))
+        history.push(`/posts/search?searchQuery=${search || 'none'}&tags=${tags.join(',')}`)
       }
       else{
         history.push('/');

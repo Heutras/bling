@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react'
 import { AppBar, Avatar, Button, Toolbar, Typography } from '@mui/material'
 import { Link, useLocation } from 'react-router-dom';
-import bling from '../../images/bling1.webp';
+import blingLogo from '../../images/BlingLogo.png';
+import blingText from '../../images/BlingText.png';
 import { signOut } from "../../slices/auth";
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -28,10 +29,10 @@ function Navbar() {
     }, [location]); 
     return (
         <AppBar className={classes.appBar} position="static" color="inherit">
-            <div className={classes.brandContainer}>
-            <Typography component={Link} to="/" className={classes.heading} variant="h2" align="center">Bling</Typography>
-            <img className={classes.image} src={bling} alt="bling" height="60"/>
-            </div>
+            <Link to="/" className={classes.brandContainer}>
+                <img src={blingText} alt="bling-text" height="45px"/>
+                <img className={classes.image} src={blingLogo} alt="bling-logo" height="40px"/>
+            </Link>
             <Toolbar className={classes.toolbar}>
                 {user ? (
                     <div className={classes.profile}>
