@@ -10,6 +10,7 @@ import * as api from '../../../api';
 import { deletePost, updatePost} from '../../../slices/posts';
 import { useDispatch, useSelector} from 'react-redux';
 import { Notify } from '../../Form/Form';
+import defaultPostImg from '../../../images/default_post.png'
 
 
 const Post = ( {post, setCurrentId} ) => {
@@ -66,7 +67,11 @@ const Post = ( {post, setCurrentId} ) => {
 
     return (
         <Card className={classes.card}>
-            <CardMedia className={classes.media} image={post.selectedFile} title={post.title}/>
+            {post.selectedFile ? (
+                <CardMedia className={classes.media} image={post.selectedFile} title={post.title}/>
+            ) : (
+                <CardMedia className={classes.media} image={defaultPostImg} title={post.title}/>
+            )}
             <div className={classes.overlay}>
                 <Typography variant="h6">{post.name}</Typography>
                 <Typography variant="body2">{formatDistanceToNow(Date.parse(post.createdAt))} ago</Typography>

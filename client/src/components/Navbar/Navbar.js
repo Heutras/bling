@@ -23,7 +23,6 @@ function Navbar() {
         const token = JSON.parse(localStorage.getItem('token'));
         if (token) {
             const decodedToken = decode(token);
-            console.log(decodedToken)
             if (decodedToken.exp * 1000 < new Date().getTime()) logout();
         }
     }, [location]); 
