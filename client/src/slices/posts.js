@@ -13,12 +13,15 @@ API.interceptors.request.use((req) => {
 });
 
 const initialState = {
-    posts: []
+    posts: [],
+    currentPage: 1,
+    numberOfPages: 1
 };
 
-export const fetchPosts = createAsyncThunk('posts/requestStatus',async () => {
-    const res = await axios.get(url);
-    return res.data;
+export const fetchPosts = createAsyncThunk('posts/requestStatus',async (page) => {
+    const { data } = await axios.get(`${url}?page=${page}`);
+    console.log('gelen res bu',data)
+    return data;
 })
 export const fetchPostsBySearch = createAsyncThunk('postsBySearch/requestStatus',async (searchQuery) => {
     const { data } = await axios.get(`${url}/search?searchQuery=${searchQuery.search.split(' ').join(',') || 'none'}&tags=${searchQuery.tags}`);
@@ -45,7 +48,9 @@ export const postSlice = createSlice({
         })
         builder.addCase(fetchPosts.fulfilled, (state, action) => {
             state.loading = false;
-            state.posts = action.payload;
+            state.posts = action.payload.data;
+            state.currentPage = action.payload.currentPage
+            state.numberOfPages = action.payload.numberOfPages
             state.error = '';
         })
         builder.addCase(fetchPosts.rejected, (state, action) => {
@@ -58,7 +63,9 @@ export const postSlice = createSlice({
         })
         builder.addCase(fetchPostsBySearch.fulfilled, (state, action) => {
             state.loading = false;
-            state.posts = action.payload;
+            state.posts = action.payload.data;
+            state.currentPage = action.payload.currentPage
+            state.numberOfPages = action.payload.numberOfPages
             state.error = '';
         })
         builder.addCase(fetchPostsBySearch.rejected, (state, action) => {

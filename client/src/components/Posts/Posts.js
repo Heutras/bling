@@ -5,7 +5,7 @@ import useStyles from './styles';
 const Posts = ({ posts, setCurrentId }) => {
     const classes = useStyles();
     return (
-    !posts.length ?
+    !posts?.length ?
     <Grid container alignItems="center" justifyContent="center" style={{ minHeight: '70vh' }}><CircularProgress color="error" size={175}/></Grid> :
     (
         <Grid className={classes.container} container alignItems="stretch" spacing={3}>
