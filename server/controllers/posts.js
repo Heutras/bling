@@ -15,6 +15,17 @@ export const getPosts = async (req, res) => {
         return res.status(404).json({ message: error.message });
     }
 };
+export const getPost = async (req, res) => {
+    const { id } = req.params;
+    try {        
+        const post = await PostMessage.findById(id);
+
+        return res.status(200).json(post);
+    } catch (error) {
+        return res.status(404).json({ message: error.message });
+    }
+};
+
 export const getPostsBySearch = async (req, res) => {
     const { searchQuery, tags} = req.query;
     const searchArray = searchQuery.split(',');

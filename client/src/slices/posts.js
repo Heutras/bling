@@ -5,6 +5,7 @@ const url = 'http://localhost:5000/posts';
 
 const initialState = {
     posts: [],
+    post:{},
     currentPage: 1,
     numberOfPages: 1,
     loading:false,
@@ -13,6 +14,10 @@ const initialState = {
 
 export const fetchPosts = createAsyncThunk('posts/requestStatus',async (page) => {
     const { data } = await axios.get(`${url}?page=${page}`);
+    return data;
+})
+export const fetchPost = createAsyncThunk('post/requestStatus',async (id) => {
+    const { data } = await axios.get(`${url}/${id}`);
     return data;
 })
 export const fetchPostsBySearch = createAsyncThunk('postsBySearch/requestStatus',async (searchQuery) => {
@@ -48,6 +53,19 @@ export const postSlice = createSlice({
         builder.addCase(fetchPosts.rejected, (state, action) => {
             state.loading = false;
             state.posts = [];
+            state.error = action.error.message;
+        })
+        builder.addCase(fetchPost.pending, (state) => {
+          state.loading = true;
+        })
+        builder.addCase(fetchPost.fulfilled, (state, action) => {
+            state.loading = false;
+            state.post = action.payload;
+            state.error = '';
+        })
+        builder.addCase(fetchPost.rejected, (state, action) => {
+            state.loading = false;
+            state.post = {};
             state.error = action.error.message;
         })
         builder.addCase(fetchPostsBySearch.pending, (state) => {
