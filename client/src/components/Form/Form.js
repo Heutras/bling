@@ -18,6 +18,9 @@ export const Notify = (type, result) => {
     else if(type === "Like"){
         result ? toast.success("Post Liked!") : toast.error("Post Could Not Be Liked!");
     }
+    else if(type === "Comment"){
+        result ? toast.success("Thank you for sharing your opinion!") : toast.error("You can't comment right know!");
+    }
     else{
         result ? toast.success("Post Deleted!") : toast.error("Post Could Not Be Deleted!");
     }
