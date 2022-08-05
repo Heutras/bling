@@ -15,11 +15,13 @@ const CommentSection = ({ post}) => {
     const [comment, setComment] = useState("")
     const user = JSON.parse(localStorage.getItem('profile'));
     console.log('gelen com',comments)
-    const handleClick = () => {
+    const handleClick = async () => {
         const finalComment = `${user.userName}: ${comment}`
         api.comment(finalComment, post._id).then((res) => {
             if (res.status === 200) {
-                dispatch(updatePost(res.data));
+                const { payload: { comments: newComments }} =  dispatch(updatePost(res.data));
+                setComments(newComments);
+                setComment('');
                 Notify("Comment", true)
             }
             else {
