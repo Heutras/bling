@@ -6,7 +6,9 @@ const url = 'http://localhost:5000/posts';
 const initialState = {
     posts: [],
     currentPage: 1,
-    numberOfPages: 1
+    numberOfPages: 1,
+    loading:false,
+    error:''
 };
 
 export const fetchPosts = createAsyncThunk('posts/requestStatus',async (page) => {

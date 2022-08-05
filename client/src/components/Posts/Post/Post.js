@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, CardActions, CardContent, CardMedia, Button, Typography} from '@mui/material';
+import { Card, CardActions, CardContent, CardMedia, Button, Typography, ButtonBase} from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -11,15 +11,15 @@ import { deletePost, updatePost} from '../../../slices/posts';
 import { useDispatch, useSelector} from 'react-redux';
 import { Notify } from '../../Form/Form';
 import defaultPostImg from '../../../images/default_post.png'
-
+import { useHistory } from 'react-router-dom';
 
 const Post = ( {post, setCurrentId} ) => {
     
     const classes = useStyles();
     const dispatch = useDispatch();
-    const user = useSelector((state) => state.auth.user);
+    const history = useHistory();
+    const { user } = useSelector((state) => state.auth);
     const [likes, setLikes] = useState(post?.likes)
-    
     const userId = user?._id;
     const hasLikedPost = post.likes.find((like) => like === userId);
     const handleDelete = (id) => {
@@ -52,6 +52,7 @@ const Post = ( {post, setCurrentId} ) => {
         }
     }
 
+    const openPost = () => history.push(`/posts/${post._id}`)
     const Likes = () => {
         if (likes.length > 0) {
           return likes.find((like) => like === userId)
@@ -64,35 +65,37 @@ const Post = ( {post, setCurrentId} ) => {
     
         return <><FavoriteBorderIcon fontSize="small" />&nbsp;Like</>;
       };
-
+    
     return (
         <Card className={classes.card} raised elevation={6}>
-            {post.selectedFile ? (
-                <CardMedia className={classes.media} image={post.selectedFile} title={post.title}/>
-            ) : (
-                <CardMedia className={classes.media} image={defaultPostImg} title={post.title}/>
-            )}
-            <div className={classes.overlay}>
-                <Typography variant="h6">{post.name}</Typography>
-                <Typography variant="body2">{formatDistanceToNow(Date.parse(post.createdAt))} ago</Typography>
-            </div>
-            {(user?._id === post?.creator) && (
-                <div className={classes.overlay2} name="edit">
-                    <Button 
-                        style={{color: 'white'}} 
-                        size="small" 
-                        onClick={() => setCurrentId(post._id)}>
-                        <MoreHorizIcon fontSize="medium" />
-                    </Button>
+            <ButtonBase className={classes.cardAction} onClick={openPost}>    
+                {post.selectedFile ? (
+                    <CardMedia className={classes.media} image={post.selectedFile} title={post.title}/>
+                ) : (
+                    <CardMedia className={classes.media} image={defaultPostImg} title={post.title}/>
+                )}
+                <div className={classes.overlay}>
+                    <Typography variant="h6">{post.name}</Typography>
+                    <Typography variant="body2">{formatDistanceToNow(Date.parse(post.createdAt))} ago</Typography>
                 </div>
-            )}
-            <div className={classes.details}>
-                <Typography variant="body2" color="textSecondary">{post.tags.map((tag) => `#${tag} `)}</Typography>
-            </div>
-            <Typography className={classes.title} variant="h5" gutterBottom>{post.title}</Typography>
-            <CardContent>
-                <Typography variant="body2" color="textSecondary" component="p">{post.message.split(' ').splice(0, 20).join(' ')}...</Typography>
-            </CardContent>
+                {(user?._id === post?.creator) && (
+                    <div className={classes.overlay2} name="edit">
+                        <Button 
+                            style={{color: 'white'}} 
+                            size="small" 
+                            onClick={() => setCurrentId(post._id)}>
+                            <MoreHorizIcon fontSize="medium" />
+                        </Button>
+                    </div>
+                )}
+                <div className={classes.details}>
+                    <Typography variant="body2" color="textSecondary">{post.tags.map((tag) => `#${tag} `)}</Typography>
+                </div>
+                <Typography className={classes.title} variant="h5" gutterBottom>{post.title}</Typography>
+                <CardContent>
+                    <Typography variant="body2" color="textSecondary" component="p">{post.message.split(' ').splice(0, 20).join(' ')}...</Typography>
+                </CardContent>
+            </ButtonBase>
             <CardActions className={classes.cardActions}>
                 <Button size="small" color="primary" onClick={(e, id) => handleLike(post._id)} disabled={!user}>
                     <Likes />
