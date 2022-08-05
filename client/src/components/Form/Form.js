@@ -6,6 +6,7 @@ import { createPost, updatePost } from '../../slices/posts';
 import useStyles from './styles';
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 export const Notify = (type, result) => {
     if(type === "Create" ){
@@ -23,6 +24,7 @@ export const Notify = (type, result) => {
 };
 
 const Form = ({ currentId, setCurrentId }) => {
+    const history = useHistory();
     const dispatch = useDispatch();
     const classes = useStyles();
     const post = useSelector(( state ) => currentId ? state.posts.posts.find((p) => p._id === currentId) : null);
@@ -38,7 +40,8 @@ const Form = ({ currentId, setCurrentId }) => {
             api.createPost({...postData, name: user?.name}).then((res) => {
                 if(res.status === 201 ){
                     Notify("Create", true);
-                    dispatch(createPost(res.data));                    
+                    dispatch(createPost(res.data));
+                    history.push(`/posts/${res.data._id}`)          
                 }
                 else{
                     Notify("Create", false);
