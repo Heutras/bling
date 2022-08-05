@@ -2,15 +2,6 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios';
 
 const url = 'http://localhost:5000/posts';
-const API = axios.create({ baseURL: 'http://localhost:5000/'})
-
-
-API.interceptors.request.use((req) => {
-    if (localStorage.getItem('profile')) {
-      req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem('token'))}`;
-    }
-    return req;
-});
 
 const initialState = {
     posts: [],
@@ -20,7 +11,6 @@ const initialState = {
 
 export const fetchPosts = createAsyncThunk('posts/requestStatus',async (page) => {
     const { data } = await axios.get(`${url}?page=${page}`);
-    console.log('gelen res bu',data)
     return data;
 })
 export const fetchPostsBySearch = createAsyncThunk('postsBySearch/requestStatus',async (searchQuery) => {
@@ -63,9 +53,7 @@ export const postSlice = createSlice({
         })
         builder.addCase(fetchPostsBySearch.fulfilled, (state, action) => {
             state.loading = false;
-            state.posts = action.payload.data;
-            state.currentPage = action.payload.currentPage
-            state.numberOfPages = action.payload.numberOfPages
+            state.posts = action.payload;
             state.error = '';
         })
         builder.addCase(fetchPostsBySearch.rejected, (state, action) => {

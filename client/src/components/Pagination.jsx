@@ -8,7 +8,6 @@ import { fetchPosts } from '../slices/posts';
 const Paginate = ( {page} ) => {
     const dispatch = useDispatch();
     const {numberOfPages} = useSelector ((state) => state.posts)
-    console.log('bu',numberOfPages)
     const classes = useStyles();
     useEffect(() => {
         if(page) dispatch(fetchPosts(page));

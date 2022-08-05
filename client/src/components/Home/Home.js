@@ -3,7 +3,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
-import { fetchPosts, fetchPostsBySearch } from '../../slices/posts';
+import { fetchPostsBySearch } from '../../slices/posts';
 import { setAuth } from '../../slices/auth';
 import Form from '../Form/Form'
 import Posts from '../Posts/Posts'
@@ -24,19 +24,13 @@ function Home() {
     const searchQuery = query.get('searchQuery');
     const [search, setSearch] = useState('');
     const [tags, setTags] = useState([]);
-    // useEffect(() => {
-    //   dispatch(fetchPosts())
-    // }
-    // ,[]);
 
     useEffect(() => {
       dispatch(setAuth(JSON.parse(localStorage.getItem('profile'))))
       // İlk girişte user data'sini okuyup redux store'a atan kod parcasi
     },[])
     
-
     const posts = useSelector(( { posts } ) => posts.posts);  
-    
     
     const searchPost = () => {
       if(search.trim() || tags) {
@@ -84,9 +78,11 @@ function Home() {
                     <Button variant="contained" onClick={searchPost} className={classes.searchButton} color="primary">Search</Button>
                   </AppBar>
                   <Form currentId={currentId} setCurrentId={setCurrentId}/>
+                  {(!searchQuery && !tags.length) && (
                   <Paper elevation={6}>
                     <Pagination page={page}/>
                   </Paper>
+                  )}
                 </Grid>
             </Grid>
             </Container>

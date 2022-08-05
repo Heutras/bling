@@ -17,10 +17,19 @@ export const getPosts = async (req, res) => {
 };
 export const getPostsBySearch = async (req, res) => {
     const { searchQuery, tags} = req.query;
+    const searchArray = searchQuery.split(',');
+    let searchRegex = ''
+    searchArray.map((item, index) =>{
+        if (searchArray.length - 1 === index) {
+            searchRegex += item;
+        } else {
+            searchRegex += item + '|';
+        }
+    }
+    )
     try {
-        const title = new RegExp(searchQuery.split(',').join(''), 'i')
-        const posts = await PostMessage.find({ $or: [ { title }, { tags: {$in: tags.split(',')}}]});
- 
+        const title = new RegExp(searchRegex, 'gmi')
+        const posts = await PostMessage.find({ $or: [ { "title": { $regex: title }  }, { tags: {$in: tags.split(',')}}]});
         return res.status(200).json( { data: posts});
     } catch (error) {
         return res.status(404).json({ message: error.message });
