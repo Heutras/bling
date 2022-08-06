@@ -35,20 +35,16 @@ const Post = ({ post, setCurrentId }) => {
     }
     const handleLike = (id) => {
         api.likePost(id).then(res => {
-            if (res.status === 200) {
-                dispatch(updatePost(res.data))
-                Notify("Like", true)
-            }
-            else {
-                Notify("Like", false)
-            }
+            if (res.status === 200)  dispatch(updatePost(res.data))
         });
 
         if (hasLikedPost) {
             setLikes(post.likes.filter((id) => id !== userId));
+            Notify("Dislike", true)
         }
         else {
             setLikes([...post.likes, userId])
+            Notify("Like", true)
         }
     }
 

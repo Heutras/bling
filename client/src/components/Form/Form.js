@@ -15,6 +15,9 @@ export const Notify = (type, result) => {
     else if( type === "Update"){
         result ? toast.success("Post Updated!") : toast.error("Post Update Failed!");
     }
+    else if(type === "Dislike"){
+        result ? toast.success("Post Disliked!") : toast.error("Post Could Not Be Disliked!");
+    }
     else if(type === "Like"){
         result ? toast.success("Post Liked!") : toast.error("Post Could Not Be Liked!");
     }

@@ -8,7 +8,6 @@ import { Notify } from '../Form/Form.js';
 import { Toaster } from 'react-hot-toast';
 
 const CommentSection = ({ post}) => {
-    // const { post: { comments } } = useSelector((state) => state.posts);
     const classes = useStyles();
     const dispatch = useDispatch();
     const [comments, setComments] = useState(post?.comments)
