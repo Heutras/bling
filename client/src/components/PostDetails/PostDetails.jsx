@@ -16,7 +16,7 @@ const PostDetails = () => {
   const { id } = useParams();
   useEffect(() => {
     dispatch(fetchPost(id));
-  }, [id])
+  }, [])
   useEffect(() => {
     dispatch(fetchPostsBySearch( {search: 'none', tags: post?.tags?.join(',')} ));
   }, [post])
@@ -27,22 +27,21 @@ const PostDetails = () => {
     </Paper>
   }
 
-  const recommendedPosts = posts.filter( ({_id}) => _id !== post?._id)
+  const recommendedPosts = posts?.filter( ({_id}) => _id !== post?._id)
   
   const openPost = (_id) =>{
     history.push(`/posts/${_id}`)
 
   }
-  console.log('postsun degeri?',post)
+  console.log({postsDegerleri: post})
   return (
     <div className={classes.card}>
       {post ? (<>
         <div className={classes.section}>
-          <Typography variant="h3" component="h2">{post?.title}</Typography>
-          <Typography gutterBottom variant="h6" color="textSecondary" component="h2">{post?.tags?.map((tag) => `#${tag} `)}</Typography>
-          <Typography gutterBottom variant="body1" component="p">{post?.message}</Typography>
-          <Typography variant="h6">Created by: {post?.name}</Typography>
-          <Typography variant="body1">{formatDistanceToNow(Date.parse(post?.createdAt))} ago</Typography>
+          <Typography variant="h3" component="h2">{post.title}</Typography>
+          <Typography gutterBottom variant="h6" color="textSecondary" component="h2">{post.tags?.map((tag) => `#${tag} `)}</Typography>
+          <Typography gutterBottom variant="body1" component="p">{post.message}</Typography>
+          <Typography variant="body1">{formatDistanceToNow(Date.parse(post.createdAt))} ago</Typography>
           <Divider style={{ margin: '20px 0' }} />
           <Typography variant="body1"><strong>Realtime Chat - coming soon!</strong></Typography>
           <Divider style={{ margin: '20px 0' }} />
@@ -50,7 +49,7 @@ const PostDetails = () => {
           <Divider style={{ margin: '20px 0' }} />
         </div>
         <div className={classes.imageSection}>
-          <img className={classes.media} src={post?.selectedFile || defaultPostImg} alt={post.title} />
+          <img className={classes.media} src={post?.selectedFile || defaultPostImg} alt={post?.title} />
         </div>
       </>) : (<>
         <div className={classes.section}>

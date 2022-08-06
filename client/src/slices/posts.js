@@ -5,7 +5,7 @@ const url = 'http://localhost:5000/posts';
 
 const initialState = {
     posts: [],
-    post:{},
+    post:null,
     currentPage: 1,
     numberOfPages: 1,
     loading:false,
