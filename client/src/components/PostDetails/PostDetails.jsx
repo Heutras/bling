@@ -3,6 +3,7 @@ import { Paper, Typography, CircularProgress, Divider } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import { fetchPost, fetchPostsBySearch } from '../../slices/posts';
+import { formatDistanceToNow } from 'date-fns';
 import useStyles from './styles';
 import defaultPostImg from '../../images/default_post.png'
 import CommentSection from './CommentSection';
@@ -32,15 +33,16 @@ const PostDetails = () => {
     history.push(`/posts/${_id}`)
 
   }
+  console.log('postsun degeri?',post)
   return (
     <div className={classes.card}>
       {post ? (<>
         <div className={classes.section}>
           <Typography variant="h3" component="h2">{post?.title}</Typography>
           <Typography gutterBottom variant="h6" color="textSecondary" component="h2">{post?.tags?.map((tag) => `#${tag} `)}</Typography>
-          <Typography gutterBottom variant="body1" component="p">{post.message}</Typography>
+          <Typography gutterBottom variant="body1" component="p">{post?.message}</Typography>
           <Typography variant="h6">Created by: {post?.name}</Typography>
-          <Typography variant="body1">zaman</Typography>
+          <Typography variant="body1">{formatDistanceToNow(Date.parse(post?.createdAt))} ago</Typography>
           <Divider style={{ margin: '20px 0' }} />
           <Typography variant="body1"><strong>Realtime Chat - coming soon!</strong></Typography>
           <Divider style={{ margin: '20px 0' }} />

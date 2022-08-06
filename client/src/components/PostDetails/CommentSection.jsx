@@ -1,6 +1,6 @@
-import React, { useState, useRef } from 'react'
+import React, { useState } from 'react'
 import { Typography, TextField, Button } from '@mui/material'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import * as api from '../../api/index.js';
 import useStyles from './styles';
 import { updatePost } from '../../slices/posts.js';
@@ -13,7 +13,6 @@ const CommentSection = ({ post}) => {
     const [comments, setComments] = useState(post?.comments)
     const [comment, setComment] = useState("")
     const user = JSON.parse(localStorage.getItem('profile'));
-    console.log('gelen com',comments)
     const handleClick = async () => {
         const finalComment = `${user.userName}: ${comment}`
         api.comment(finalComment, post._id).then((res) => {

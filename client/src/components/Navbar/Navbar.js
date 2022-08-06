@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import { AppBar, Avatar, Button, Toolbar, Typography } from '@mui/material'
 import { Link, useLocation } from 'react-router-dom';
 import blingLogo from '../../images/BlingLogo.png';
-import blingText from '../../images/BlingText.png';
 import { signOut } from "../../slices/auth";
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -30,8 +29,7 @@ function Navbar() {
     return (
         <AppBar className={classes.appBar} position="static" color="inherit">
             <Link to="/" className={classes.brandContainer}>
-                <img src={blingText} alt="bling-text" height="45px"/>
-                <img className={classes.image} src={blingLogo} alt="bling-logo" height="40px"/>
+                <img src={blingLogo} alt="bling-logo" height="60px"/>
             </Link>
             <Toolbar className={classes.toolbar}>
                 {user ? (
